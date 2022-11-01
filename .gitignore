@@ -1,0 +1,17 @@
+*.save
+*.exe
+*.bmarks
+*.depend
+*.html
+*.layout
+*.cbp
+*.log*
+*.o
+strcmp_for_asm.cpp
+user_code_test_asm.txt
+testfile.cpp
+commands.h
+*.png
+*expanded*.cpp
+*Code
+

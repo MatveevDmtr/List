@@ -1,0 +1,25 @@
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+--------------------Start program--------------------
+list created
+start insert
+start insert before
+start insert
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode0
+lst pointer: 0064FEEC
+here
+here
+start making console cmd
+console cmd: dot -T png -o graphCode0 dump.dot
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode1
+lst pointer: 0064FEEC
+here
+here
+start making console cmd
+console cmd: dot -T png -o graphCode1 dump.dot
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+--------------------Finish program--------------------

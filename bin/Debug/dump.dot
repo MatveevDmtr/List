@@ -1,0 +1,79 @@
+digraph {
+graph [dpi = 100]rankdir = LR;
+splines = "ortho";
+node [ shape=record ];
+LIST [label = "LIST|size: 3|Capacity: 10", style = "filled", fillcolor = "indigo", fontcolor = "yellow"];
+LIST -> struct0 [style="invis" weight = 1000];
+index0[label = "index: 0", style = "filled" fillcolor = "coral"];
+index1[label = "index: 1", style = "filled" fillcolor = "coral"];
+index0 -> index1 [style = "invis" weight = 200];
+index2[label = "index: 2", style = "filled" fillcolor = "coral"];
+index1 -> index2 [style = "invis" weight = 200];
+index3[label = "index: 3", style = "filled" fillcolor = "coral"];
+index2 -> index3 [style = "invis" weight = 200];
+index4[label = "index: 4", style = "filled" fillcolor = "coral"];
+index3 -> index4 [style = "invis" weight = 200];
+index5[label = "index: 5", style = "filled" fillcolor = "coral"];
+index4 -> index5 [style = "invis" weight = 200];
+index6[label = "index: 6", style = "filled" fillcolor = "coral"];
+index5 -> index6 [style = "invis" weight = 200];
+index7[label = "index: 7", style = "filled" fillcolor = "coral"];
+index6 -> index7 [style = "invis" weight = 200];
+index8[label = "index: 8", style = "filled" fillcolor = "coral"];
+index7 -> index8 [style = "invis" weight = 200];
+index9[label = "index: 9", style = "filled" fillcolor = "coral"];
+index8 -> index9 [style = "invis" weight = 200];
+INDEX [style = "filled", fillcolor = "lightslateblue"]
+INDEX -> index0[style = "invis" weight = 900]
+struct0 [
+label = "<data>elem: nil|<next>next: 2|<prev>prev: 1", style = "filled", fillcolor = "cyan" 
+];
+struct0:<next> -> struct2:<prev> [weight = 0] [ color=red  ]
+struct1 [
+label = "<data>elem: 65|<next>next: 0|<prev>prev: 3", style = "filled", color = "black", fillcolor = "aquamarine" 
+];
+struct0 -> struct1 [dir=none weight=900 style="invis"];
+struct1:<next> -> struct0:<prev> [weight = 0] [ color=red  ]
+struct2 [
+label = "<data>elem: 75|<next>next: 3|<prev>prev: 0", style = "filled", color = "black", fillcolor = "aquamarine" 
+];
+struct1 -> struct2 [dir=none weight=900 style="invis"];
+struct2:<next> -> struct3:<prev> [weight = 0] [ color=red  ]
+struct3 [
+label = "<data>elem: 85|<next>next: 1|<prev>prev: 2", style = "filled", color = "black", fillcolor = "aquamarine" 
+];
+struct2 -> struct3 [dir=none weight=900 style="invis"];
+struct3:<next> -> struct1:<prev> [weight = 0] [ color=red  ]
+struct4 [
+label = "<data>elem: -13|<next>next: 5|<prev>prev: -1", style = "filled", color = "black", fillcolor = "lightgrey" 
+];
+struct3 -> struct4 [dir=none weight=900 style="invis"];
+struct4:<next> -> struct5:<prev> [weight = 0] [ color=red  ]
+struct5 [
+label = "<data>elem: -13|<next>next: 6|<prev>prev: -1", style = "filled", color = "black", fillcolor = "lightgrey" 
+];
+struct4 -> struct5 [dir=none weight=900 style="invis"];
+struct5:<next> -> struct6:<prev> [weight = 0] [ color=red  ]
+struct6 [
+label = "<data>elem: -13|<next>next: 7|<prev>prev: -1", style = "filled", color = "black", fillcolor = "lightgrey" 
+];
+struct5 -> struct6 [dir=none weight=900 style="invis"];
+struct6:<next> -> struct7:<prev> [weight = 0] [ color=red  ]
+struct7 [
+label = "<data>elem: -13|<next>next: 8|<prev>prev: -1", style = "filled", color = "black", fillcolor = "lightgrey" 
+];
+struct6 -> struct7 [dir=none weight=900 style="invis"];
+struct7:<next> -> struct8:<prev> [weight = 0] [ color=red  ]
+struct8 [
+label = "<data>elem: -13|<next>next: 9|<prev>prev: -1", style = "filled", color = "black", fillcolor = "lightgrey" 
+];
+struct7 -> struct8 [dir=none weight=900 style="invis"];
+struct8:<next> -> struct9:<prev> [weight = 0] [ color=red  ]
+struct9 [
+label = "<data>elem: -13|<next>next: 10|<prev>prev: -1", style = "filled", color = "black", fillcolor = "lightgrey" 
+];
+struct8 -> struct9 [dir=none weight=900 style="invis"];
+structFree [
+label = "free: 4", style = "filled", fillcolor = "green"]
+structFree -> struct4:<data> [weight = 0] [color = darkgoldenrod2]
+}

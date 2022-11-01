@@ -1,0 +1,54 @@
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+--------------------Start program--------------------
+list created
+start insert
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode0.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode0.png dump.dot
+start insert before
+start insert
+Recalloc necessary
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode1.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode1.png dump.dot
+Type_calloc: elem_s
+Sizeof type: 4
+Calloc returned: 00BE0E88
+i_next = 2
+i_next = 1
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode2.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode2.png dump.dot
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode3.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode3.png dump.dot
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode4.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode4.png dump.dot
+start insert
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode5.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode5.png dump.dot
+start delete
+lst pointer in HTMLDump: 0064FEEC
+picture name: graphCode6.png
+lst pointer: 0064FEEC
+start making console cmd
+console cmd: dot -T png -o graphCode6.png dump.dot
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+--------------------Finish program--------------------
