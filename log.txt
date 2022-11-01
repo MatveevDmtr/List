@@ -19,7 +19,7 @@ start making console cmd
 console cmd: dot -T png -o graphCode1.png dump.dot
 Type_calloc: elem_s
 Sizeof type: 4
-Calloc returned: 00B50E88
+Calloc returned: 006C0E88
 i_next = 2
 i_next = 1
 lst pointer in HTMLDump: 0064FEEC
@@ -44,6 +44,8 @@ lst pointer: 0064FEEC
 start making console cmd
 console cmd: dot -T png -o graphCode5.png dump.dot
 start delete
+start delete
+start insert
 lst pointer in HTMLDump: 0064FEEC
 picture name: graphCode6.png
 lst pointer: 0064FEEC

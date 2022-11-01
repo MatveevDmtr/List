@@ -36,7 +36,7 @@ label = "<data>elem: 65|<next>next: 3|<prev>prev: 0", style = "filled", color = 
 struct1 -> struct2 [dir=none weight=900 style="invis" constraint=true];
 struct2 -> struct3 [weight = 0, constraint=false, color=red  ]
 struct3 [
-label = "<data>elem: 85|<next>next: 0|<prev>prev: 2", style = "filled", color = "black", fillcolor = "aquamarine" 
+label = "<data>elem: 228|<next>next: 0|<prev>prev: 2", style = "filled", color = "black", fillcolor = "aquamarine" 
 ];
 struct2 -> struct3 [dir=none weight=900 style="invis" constraint=true];
 struct3 -> struct0 [weight = 0, constraint=false, color=red  ]

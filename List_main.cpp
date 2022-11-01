@@ -6,7 +6,6 @@
 
 #include "list.h"
 #include "D:\\Programming\\C\\Ded_course_1_sem\\Stack\\GetPoison.h"
-//#include "logging.h"
 
 #include "D:\\Programming\\C\\Ded_course_1_sem\\Processor_v4\\logging.h"
 
@@ -53,6 +52,8 @@ int main()
     HTMLDump(&lst, "3 ins after");
 
     DeleteElem(&lst, 1);
+    ListPop(&lst);
+    ListAppend(&lst, 228);
 
     HTMLDump(&lst, "After delete");
     //HTMLDump(&lst, "EXAMPLE");
@@ -117,9 +118,9 @@ int ListCtor(list_t* lst)
 
     for (size_t i = 0; i < lst->Capacity; i++)
     {
-        lst->Ptr[i] = {.elem = POISONED_ELEM,//pois_elem,
+        lst->Ptr[i] = {.elem = POISONED_ELEM,
                        .next = i + 1,
-                       .prev = PREV_FOR_FREE}; //const
+                       .prev = PREV_FOR_FREE};
     }
 
     lst->Ptr[0].next = 0;
@@ -128,6 +129,18 @@ int ListCtor(list_t* lst)
     ListVerify(lst);
 
     return 0;
+}
+
+int ListAppend(list_t* lst, elem_t elem)
+{
+    InsertAfterElem(lst, lst->Ptr[0].prev, elem);
+
+    return 0;
+}
+
+elem_t ListPop(list_t* lst)
+{
+    return DeleteElem(lst, lst->Ptr[0].prev);
 }
 
 int InsertBeforeElem(list_t* lst, size_t i_anc, elem_t elem)
