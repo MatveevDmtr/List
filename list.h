@@ -79,6 +79,8 @@ int InsertBeforeElem(list_t* lst, size_t i_anc, elem_t elem);
 
 int InsertAfterElem (list_t* lst, size_t i_anc, elem_t elem);
 
+int ListVerify(list_t* lst);
+
 elem_t DeleteElem(list_t* lst, size_t i_del);
 
 void GraphListDump(const list_t* lst, const char* picname);

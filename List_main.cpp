@@ -16,17 +16,14 @@ enum ERRCODES
      SEGFAULT           , // 1
      ZOMBIE             , // 2
      NULLPTR            , // 3
-     PTRPOISONED        , // 4
-     SIZEPOISONED       , // 5
-     NEGCAP             , // 6
-     CAPPOISONED        , // 7
-     FILEERROR          , // 16
-     DEBUGINFOERROR     , // 17
-     REALLOCERROR       , // 18
-     STACKOVERFLOW      , // 19
-     CONSTR_ERROR       , // 20
-     DESTR_ERROR        , // 21
-     DECODEERROR          // 22
+     SIZEPOISONED       , // 4
+     NEGCAP             , // 5
+     DEBUGINFOERROR     , // 6
+     REALLOCERROR       , // 7
+     STACKOVERFLOW      , // 8
+     FREE_ERROR         , // 9
+     CHAINERROR         , // 10
+     CONSTR_ERROR         // 11
 };
 
 enum REALLOC_MODES
@@ -128,7 +125,7 @@ int ListCtor(list_t* lst)
     lst->Ptr[0].next = 0;
     lst->Ptr[0].prev = 0;
 
-    //StackVerify(lst);
+    ListVerify(lst);
 
     return 0;
 }
@@ -144,7 +141,8 @@ int InsertBeforeElem(list_t* lst, size_t i_anc, elem_t elem)
 
 int InsertAfterElem(list_t* lst, size_t i_anc, elem_t elem)
 {
-    //verificator
+    ListVerify(lst);
+
     log("start insert\n");
 
     size_t new_next = lst->Ptr[i_anc].next;
@@ -173,12 +171,16 @@ int InsertAfterElem(list_t* lst, size_t i_anc, elem_t elem)
         HTMLDump(lst, " After Recalloc");
     }
 
+    ListVerify(lst);
+
     return 0;
 }
 
 elem_t DeleteElem(list_t* lst, size_t i_del)
 {
     log("start delete\n");
+
+    ListVerify(lst);
 
     elem_t del_elem = lst->Ptr[i_del].elem;
     size_t del_next = lst->Ptr[i_del].next;
@@ -196,7 +198,60 @@ elem_t DeleteElem(list_t* lst, size_t i_del)
 
     lst->Size--;   //make PushFree
 
+    ListVerify(lst);
+
     return del_elem;
+}
+
+int ListVerify(list_t* lst)
+{
+    if (lst == NULL)
+    {
+        LogError(SEGFAULT);
+        return SEGFAULT;
+    }
+    if (lst->DeadInside == 1)
+    {
+        LogError(ZOMBIE);
+        return ZOMBIE;
+    }
+    if (lst->Ptr == NULL)
+    {
+        LogError(NULLPTR);
+        return NULLPTR;
+    }
+    if (lst->Size < 0)                  LogError(SIZEPOISONED);
+    if (lst->Capacity < MIN_LEN_LIST)   LogError(NEGCAP);
+    if (lst->Capacity < lst->Size)      LogError(STACKOVERFLOW);
+    if (lst->Free > lst->Capacity - 1)  LogError(FREE_ERROR);
+
+    size_t i_next = 0;
+
+    for (size_t i = 0; i < lst->Capacity - 1; i++)
+    {
+        i_next = lst->Ptr[i].next;
+
+        if (lst->Ptr[i].prev != PREV_FOR_FREE)
+        {
+            if (lst->Ptr[i_next].prev != i)
+            {
+                LogError(CHAINERROR);
+
+                log("Elements with phys addresses %d and %d have invalid connection\n", i, i_next);
+            }
+        }
+        else
+        {
+            if (lst->Ptr[i_next].prev != PREV_FOR_FREE)
+            {
+                LogError(CHAINERROR);
+
+                log("Free element with phys address %d points not at a free element %d\n", i, i_next);
+            }
+        }
+    }
+
+    return 0;
 }
 
 int LogCritError(int errcode, const char* func, int line)
@@ -219,10 +274,6 @@ int LogCritError(int errcode, const char* func, int line)
             print_crit_errors("POINTER ERROR: Stack Pointer (pointer to buffer) is NULL", func, line);
             break;
 
-        case PTRPOISONED:
-            print_crit_errors("POINTER ERROR: Invalid Stack Pointer (pointer to buffer)", func, line);
-            break;
-
         case SIZEPOISONED:
             print_crit_errors("SIZE ERROR: Stack Size is poisoned", func, line);
             break;
@@ -231,20 +282,20 @@ int LogCritError(int errcode, const char* func, int line)
             print_crit_errors("CAPACITY ERROR: Stack Capacity has a Negative Value", func, line);
             break;
 
-        case CAPPOISONED:
-            print_crit_errors("CAPACITY ERROR: Stack Capacity is poisoned", func, line);
-            break;
-
         case STACKOVERFLOW:
             print_crit_errors("STACK OVERFLOW ERROR: Size of Stack is bigger than its Capacity", func, line);
             break;
 
-        case CONSTR_ERROR:
-            print_crit_errors("CONSTRUCTION ERROR: Trying to Construct an existing stack", func, line);
+        case FREE_ERROR:
+            print_crit_errors("FREE ERROR: Index of free unit is invalid", func, line);
             break;
 
-        case DESTR_ERROR:
-            print_crit_errors("DESTRUCTION ERROR: Trying to Destruct a Dead stack", func, line);
+        case CHAINERROR:
+            print_crit_errors("CHAIN ERROR: Invalid Next-Prev Connection between elements", func, line);
+            break;
+
+        case CONSTR_ERROR:
+            print_crit_errors("CONSTRUCTION ERROR: Trying to construct an existing List", func, line);
             break;
 
         default:
@@ -402,7 +453,6 @@ void GraphListDump(const list_t* lst, const char* picname)
     dumpline("splines = \"ortho\";\n");
     dumpline("node [ shape=record ];\n");
 
-    //dumpline("{rank=same;") //start rank=same for indexes
     dumpline("LIST [label = \"LIST|size: %d|Capacity: %d\", style = \"filled\", fillcolor = \"indigo\", fontcolor = \"yellow\"];\n", lst->Size, lst->Capacity);
     dumpline("LIST -> struct0 [style=\"invis\" weight = 1000];\n");
     for (int i = 0; i < lst->Capacity; i++)
@@ -415,10 +465,6 @@ void GraphListDump(const list_t* lst, const char* picname)
 
     dumpline("INDEX [style = \"filled\", fillcolor = \"lightslateblue\"]\n");
     dumpline("INDEX -> index0[style = \"invis\" weight = 900]\n");
-
-    //dumpline("}\n"); // end of rank=same for indexes
-
-    //dumpline("{rank = same;\n");  //ranksame
 
     for (int i = 0; i < lst->Capacity; i++)
     {
@@ -434,7 +480,7 @@ void GraphListDump(const list_t* lst, const char* picname)
             dumpline("struct%d -> struct%d [weight = 0] [ color=red  ]\n", i, lst->Ptr[i].next);
             continue;
         }
-        if (prev == -1) //const
+        if (prev == PREV_FOR_FREE)
             color = "lightgrey";
         else
             color = "aquamarine";
@@ -443,14 +489,11 @@ void GraphListDump(const list_t* lst, const char* picname)
         dumpline("struct%d [\nlabel = \"<data>elem: %d|<next>next: %d|<prev>prev: %d\", style = \"filled\", color = \"black\", fillcolor = \"%s\" \n];\n", i, elem, next, prev, color);
         dumpline("struct%d -> struct%d [dir=none weight=900 style=\"invis\" constraint=true];\n", i - 1, i);
 
-        //dumpline("index%d -> struct%d [dir=none weight=50 style=\"invis\"];\n", i, i);
-
         if (i < lst->Capacity - 1)
         {
             dumpline("struct%d -> struct%d [weight = 0, constraint=false, color=red  ]\n", i, lst->Ptr[i].next);
         }
     }
-    //dumpline("}\n");
 
     /*for (int i = 1; i < lst->Capacity; i++)
     {
@@ -481,120 +524,3 @@ void GraphListDump(const list_t* lst, const char* picname)
     printf("%d\n", system("cd D:\\Programming\\C\\Ded_course_1_sem\\List"));
     printf("%d\n", system(console_cmd));
 }
-
-/*void DumpEmExit()
-{
-    log("\n---------- EMERGENCY FINISH DUMP ----------\n\n");
-}
-
-int FuckingDump(list_t* lst,
-                const char* funcname,
-                const char* filename,
-                int         line)
-{
-    log("\n\n++++++++++ Start Dump ++++++++++\n");
-
-    if (lst == NULL)
-    {
-        LogError(SEGFAULT);
-
-        DumpEmExit();
-
-        return SEGFAULT;
-    }
-
-    if (funcname == NULL || filename == NULL || line == 0)
-    {
-        log("LISTDUMP CALL ERROR: StackDump can't recognize parameters of call\n");
-    }
-    else
-    {
-        log("\n%s at %s (line %d):\n", funcname, filename, line);
-    }
-
-    log("List [0x%p] ", lst->Ptr);
-
-    UnsignedLL sum_errcodes = 1 //FindErrors(lst);
-
-    bool is_ok = (sum_errcodes == 1);
-
-    if (is_ok)
-    {
-        print_log(FRAMED, "OK");
-    }
-    else
-    {
-        print_log(FRAMED, "ERROR");
-    }
-
-    log("Pointer:              %p\n"
-        "Size:                 %d\n"
-        "Capacity:             %d\n"
-        "DeadInside:           %d\n",
-        lst->Ptr,
-        lst->Size,
-        lst->Capacity,
-        lst->DeadInside);
-
-    if (lst->Capacity <= 0 || lst->Capacity == getPoison(lst->Capacity))
-    {
-        LogError(NEGCAP);
-
-        DumpEmExit();
-
-        return CAPPOISONED;
-    }
-
-    if (lst->Ptr == NULL || lst->Ptr == getPoison(lst->Ptr))
-    {
-        log("POINTER ERROR: Bad list Pointer (pointer to buffer)");
-
-        DumpEmExit();
-
-        return PTRPOISONED;
-    }
-
-    log("{\n");
-
-    size_t numbers_in_capacity = (size_t) ceil(log10 ((double) lst->Capacity));
-
-    elem_t curr_elem = 0;
-
-    const char* specif1 = specificator1(lst->Ptr[0]);
-    const char* specif2 = specificator2(lst->Ptr[0]);
-
-    const char* null_specif1 = specificator1(INT_CONST);
-    const char* null_specif2 = specificator2(INT_CONST);
-
-    for (size_t i = 0; i < lst->Capacity; i++)
-    {
-        curr_elem = (lst->Ptr)[i];
-
-        log("\t data[%0*d] = ", numbers_in_capacity, i);
-
-        if (curr_elem != NULL)
-        {
-            log(specif1, curr_elem);
-            log(" = ");
-            log(specif2, curr_elem);
-        }
-        else
-        {
-            log(null_specif1, curr_elem);
-            log(" = ");
-            log(null_specif2, curr_elem);
-        }
-        if (curr_elem == getPoison(curr_elem))
-        {
-            log(" (POISONED)");
-        }
-        log("\n");
-    }
-
-    log("}\n\n");
-
-    log("\n---------- Finish Dump ----------\n\n");
-
-    return 0;
-};
-*/

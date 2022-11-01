@@ -19,7 +19,7 @@ start making console cmd
 console cmd: dot -T png -o graphCode1.png dump.dot
 Type_calloc: elem_s
 Sizeof type: 4
-Calloc returned: 00BE0E88
+Calloc returned: 00B50E88
 i_next = 2
 i_next = 1
 lst pointer in HTMLDump: 0064FEEC
