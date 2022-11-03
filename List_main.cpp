@@ -209,7 +209,7 @@ elem_t DeleteElem(list_t* lst, size_t i_del)
     lst->Ptr[del_prev].next = del_next;
     lst->Ptr[del_next].prev = del_prev;
 
-    lst->Size--;   //make PushFree
+    lst->Size--;
 
     ListVerify(lst);
 
