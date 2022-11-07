@@ -5,6 +5,22 @@
 
 
 #include "list.h"
+
+/* TODO: Use relative paths
+
+1) Nobody except you will be able to run your program :(
+
+2) Btw, I can't launch your project, because I don't know how
+to build it. Usually information about how-to-build is placed in README.
+To build you can use Makefile / CMake / smth_else, but these two ones are rather common.
+
+3) And pleeeeease divide code into several modules. It's hard to read one endless file.
+
+4) It makes sense to commit only things that can't be generated from your code.
+Otherwise you just wastefully increase size of your repo. If your are working on a
+a big project size of such additional files can be enourmos. It would take forever to git clone
+your repo and thus it woudld be hard to use your project.
+*/
 #include "D:\\Programming\\C\\Ded_course_1_sem\\Stack\\GetPoison.h"
 
 #include "D:\\Programming\\C\\Ded_course_1_sem\\Processor_v4\\logging.h"
@@ -31,7 +47,7 @@ enum REALLOC_MODES
     FAST    = 2
 };
 
-
+// TODO: Extra newlines
 
 
 int main()
@@ -161,6 +177,20 @@ int InsertAfterElem(list_t* lst, size_t i_anc, elem_t elem)
     size_t new_next = lst->Ptr[i_anc].next;
     size_t i_ins    = lst->Free;
 
+    /* TODO: Make function that binds two elements
+
+    It's really hard to get what exactly all this assignments do.
+    I suggest creating function that binds two elements. Then code
+    code would look like:
+
+    ---
+    bind(PrevElem, Free);
+    bind(Free, NextElem);
+    ---
+
+    Same function can be reused in delete.
+
+    */
     lst->Free = lst->Ptr[i_ins].next;
 
     lst->Ptr[i_ins].elem = elem;
@@ -200,6 +230,7 @@ elem_t DeleteElem(list_t* lst, size_t i_del)
     size_t del_prev = lst->Ptr[i_del].prev;
     size_t old_free = lst->Free;
 
+    // TODO: Add interface to work with free list. It'll make code clearer.
     lst->Free = i_del;
 
     lst->Ptr[i_del].elem = POISONED_ELEM;
@@ -240,6 +271,16 @@ int ListVerify(list_t* lst)
 
     size_t i_next = 0;
 
+    /* TODO: Verifier not check list coherence as a whole
+
+    For example list like (no free elements):
+
+    1-->2    3-->4
+    ^---|    ^---|
+
+    Would be correct, but it's torn.
+
+    */
     for (size_t i = 0; i < lst->Capacity - 1; i++)
     {
         i_next = lst->Ptr[i].next;
@@ -357,6 +398,15 @@ int HTMLDump(const list_t* lst, const char* occasion)
         print_log(FRAMED, "FILE ERROR: Cant't open HTML file\n");
     }
 
+    /* TODO: Why do u print line by line?
+
+    For every function call compiller generates extra code.
+
+    It doesn't mean that all output text shoud be placed in one
+    one big printf as it will harm readability. But for non-formatted
+    it woul be OK.
+
+    */
     dumphtml("<pre>\n");
     dumphtml("<b>\n");
     dumphtml("<font size=6>");
@@ -378,6 +428,20 @@ int ListRecalloc(list_t* lst, size_t mode)
 {
     switch(mode)
     {
+        // TODO: Why recalloc makes sorting?
+
+        /* TODO: Add flag that indicates whether list is sorted or not
+
+        It's rather convinient to work with sorted list as it
+        it behaves like array.
+        +
+        Sorting is an expensive operation.
+        +
+        Some operations don't destroy sorted condition (f.ex push back).
+        =
+        For user it woul be usefull to know whether array is sorted or not by now.
+
+        */
         case SORTING:
         {
             elem_s* temp_ptr = allocate_array(elem_s, lst->Capacity * 2);
@@ -489,6 +553,7 @@ void GraphListDump(const list_t* lst, const char* picname)
 
         if (i == 0)
         {
+            // TODO: Long line. Fit in +-70 columns
             dumpline("struct%d [\nlabel = \"<data>elem: nil|<next>next: %d|<prev>prev: %d\", style = \"filled\", fillcolor = \"cyan\" \n];\n", i, next, prev);
             dumpline("struct%d -> struct%d [weight = 0] [ color=red  ]\n", i, lst->Ptr[i].next);
             continue;
@@ -497,7 +562,7 @@ void GraphListDump(const list_t* lst, const char* picname)
             color = "lightgrey";
         else
             color = "aquamarine";
-
+        // TODO: Extra newline
 
         dumpline("struct%d [\nlabel = \"<data>elem: %d|<next>next: %d|<prev>prev: %d\", style = \"filled\", color = \"black\", fillcolor = \"%s\" \n];\n", i, elem, next, prev, color);
         dumpline("struct%d -> struct%d [dir=none weight=900 style=\"invis\" constraint=true];\n", i - 1, i);

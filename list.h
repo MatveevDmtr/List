@@ -11,7 +11,7 @@
                            __PRETTY_FUNCTION__,           \
                            __FILE__,                      \
                            __LINE__);
-
+// TODO: Do u need this semicolon?--^
 
 #define allocate_array(type, num_elems)                             \
 ({                                                                  \
@@ -33,11 +33,16 @@ const char* PICNAME        = "graphCode";
 const char* FILE_EXTENSION = ".png";
 const char* HTML_FILE_NAME = "htmldump.html";
 
-
-typedef unsigned long long bird_t;
+// TODO: Extra newlines?
+typedef unsigned long long bird_t; // TODO: Do u use it?
 
 typedef int elem_t;
 
+/* TODO: Whant means "_s"?
+
+It's more natural and clear to use just "elem" or "list_elem"
+
+*/
 typedef struct struct_elem
 {
     elem_t elem;
@@ -93,4 +98,5 @@ int HTMLDump(const list_t* lst, const char* occasion);
 
 int LogCritError(int errcode, const char* func, int line);
 
+// TODO: Do u really want to give user access to this function?
 int ListRecalloc(list_t* lst, size_t mode);
